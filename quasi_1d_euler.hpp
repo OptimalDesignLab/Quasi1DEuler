@@ -17,7 +17,6 @@
 #include <boost/numeric/ublas/banded.hpp>
 #include <boost/numeric/ublas/vector_proxy.hpp>
 
-//#include <user_vector.h>
 #include <krylov.hpp>
 
 #include "./inner_prod_vector.hpp"
@@ -282,13 +281,6 @@ class Quasi1DEuler {
    * \brief default destructor
    */
   ~Quasi1DEuler() {}
-
-  /*!
-   * \brief sets the number of nodes in the mesh
-   * \param[in] num_nodes - desired number of nodes
-   * \param[in] order - order of accuracy
-   */
-  //void SetNodesAndOrder(const int & num_nodes, const int & order);
 
   /*!
    * \brief returns the number of nodes in the mesh
@@ -767,17 +759,6 @@ class Quasi1DEuler {
                                const InnerProdVector & rhs,
                                InnerProdVector & psi);
 
-#if 0
-  /*!
-   * \brief partial derivative of gradient (dJ/dArea), w.r.t. adjoint
-   * \param[in] obj - the objective function type
-   * \param[in] psi - the adjoint variables
-   * \param[out] dgrad - derivative of the gradient 
-   */
-  void DiffGradientWRTAdjoint(const objective & obj,
-                              const InnerProdVector & psi, 
-                              InnerProdVector & dgrad);
-#endif
   /*!
    * \brief write the solution to a Tecplot file
    * \param[in] rhoL - the density at the inlet (for dimensionalization)

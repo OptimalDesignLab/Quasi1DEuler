@@ -15,7 +15,6 @@
 #include "./inner_prod_vector.hpp"
 
 // ======================================================================
-
 /*!
  * \class Bspline
  * \brief defines one dimensional Bsplines
