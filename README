@@ -1,0 +1,89 @@
+quasi_1d_euler is a CFD code for modelling simple nozzle flows.  The spatial
+discretization uses summation-by-parts finite-difference operators and weakly
+imposed boundary conditions.  The solution method is Newton-Krylov.
+
+Dependencies
+
+The code uses the Boost library and the Kona in-house library.  Make sure both
+of these are installed on your machine first.  The code also uses GNU Make and
+gcc.
+
+Compiling
+
+First, make sure the Kona directory is in your path.  For example, if you are
+running the bash shell and you installed Kona in your home directory, you can
+add the following line to your .bashrc file:
+
+export LD_LIBRARY_PATH=/home/your_user_name/Kona:$LD_LIBRARY_PATH
+
+Change to the test_solver directory and type make.  This should compile
+solver.bin and verify.bin.  Run both of those executables.
+
+Verification
+
+The output from solver.bin should show the L2 norm of the residual decreasing
+below 1E-10 in 7 iterations.  In addition, it should show the L2 and Lmax error
+in the Mach nubmer being 2.69e-5 and 4.10e-5 (approximately).  Here is some
+sample output:
+------------------------------------------------------
+iter = 0: L2 norm of residual = 0.1772
+iter = 1: L2 norm of residual = 0.0185517
+iter = 2: L2 norm of residual = 0.000828069
+iter = 3: L2 norm of residual = 1.64644e-05
+iter = 4: L2 norm of residual = 4.55325e-07
+iter = 5: L2 norm of residual = 2.08853e-08
+iter = 6: L2 norm of residual = 7.22471e-10
+iter = 7: L2 norm of residual = 2.78434e-11
+Quasi1DEuler: NewtonKrylov converged
+L2 error in Mach number   = 2.69856e-05
+Lmax error in Mach number = 4.09699e-05
+------------------------------------------------------
+
+The end of the output from verify.bin lists the truncation order of accuracy of
+the "fourth-order" SBP operator.  The first 6 nodes (0 thru 5) and last 6 nodes
+(35 thru 40) should have order = 3 (approximately) and the remaining interior
+nodes should have orders of approximately 6.  Here is a sample output of those
+orders:
+------------------------------------------------------
+node 0 order = 3.03077
+node 1 order = 3.0154
+node 2 order = 3.03022
+node 3 order = 2.98882
+node 4 order = 2.97356
+node 5 order = 2.96023
+node 6 order = 6.37174
+node 7 order = 6.37174
+node 8 order = 6.37174
+node 9 order = 6.37174
+node 10 order = 6.37174
+node 11 order = 6.37174
+node 12 order = 6.37174
+node 13 order = 6.37174
+node 14 order = 6.37174
+node 15 order = 6.37174
+node 16 order = 6.37174
+node 17 order = 6.37174
+node 18 order = 6.37174
+node 19 order = 6.37174
+node 20 order = 6.37174
+node 21 order = 6.37174
+node 22 order = 6.37174
+node 23 order = 6.37174
+node 24 order = 6.37174
+node 25 order = 6.37174
+node 26 order = 6.37174
+node 27 order = 6.37174
+node 28 order = 6.37174
+node 29 order = 6.37174
+node 30 order = 6.37174
+node 31 order = 6.37174
+node 32 order = 6.37174
+node 33 order = 6.37174
+node 34 order = 6.37174
+node 35 order = 3.04019
+node 36 order = 3.0269
+node 37 order = 3.01155
+node 38 order = 2.96842
+node 39 order = 2.9849
+node 40 order = 2.9696
+------------------------------------------------------
