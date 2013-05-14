@@ -162,6 +162,63 @@ void Quasi1DEuler::AddUnsteadySource(const int & n) {
 
 // ======================================================================
 
+void Quasi1DEuler::CalcDPressDQProduct(const InnerProdVector & u,
+                                       InnerProdVector & v) {
+  // check for consistent sizes
+  if ( (u.size() != 3*num_nodes_) || (v.size() != num_nodes_) ) {
+    cerr << "Quasi1DEuler::CalcDPressDQProduct(): "
+         << "inconsistent sizes.";
+    throw(-1);
+  }
+  for (int i = 0; i < num_nodes_; i++) {
+    double vel = q(i,1)/q(i,0);
+    v(i) = (kGamma-1.0)*(0.5*vel*vel*u(3*i) - vel*u(3*i+1) + u(3*i+2));
+  }
+}
+
+// ======================================================================
+
+void Quasi1DEuler::CalcDPressDQTransposedProduct(
+    const InnerProdVector & u, InnerProdVector & v) {
+  // check for consistent sizes
+  if ( (u.size() != num_nodes_) || (v.size() != 3*num_nodes_) ) {
+    cerr << "Quasi1DEuler::CalcDPressDQTransposedProduct(): "
+         << "inconsistent sizes.";
+    throw(-1);
+  }
+  for (int i = 0; i < num_nodes_; i++) {
+    double vel = q(i,1)/q(i,0);
+    v(3*i) = (kGamma-1.0)*0.5*vel*vel*u(i);
+    v(3*i+1) = -(kGamma-1.0)*vel*u(i);
+    v(3*i+2) = (kGamma-1.0)*u(i);
+  }
+}
+
+// ======================================================================
+
+void Quasi1DEuler::TestDPressDQProducts() {
+  // create random vectors to apply dPress/dQ to from either side
+  InnerProdVector u(3*num_nodes_, 0.0), v(num_nodes_, 0.0),
+      w(3*num_nodes_, 0.0), z(num_nodes_, 0.0);
+  boost::random::mt19937 gen;
+  boost::random::uniform_real_distribution<double> dist(-1.0, 1.0);
+  for (int i = 0; i < 3*num_nodes_; i++)
+    u(i) = dist(gen);
+  for (int i = 0; i < num_nodes_; i++)
+    v(i) = dist(gen);
+  // evaluate dPress/dQ-vector product and contract with v
+  CalcDPressDQProduct(u, z);
+  double forward = InnerProd(z, v);
+  // evaluate the transposed-dPress/dQ-vector product and contract with u
+  CalcDPressDQTransposedProduct(v, w);
+  double backward = InnerProd(w, u);
+  cout << "Quasi1DEuler::TestDPressDQProducts:" << endl;
+  cout << "\tDifference between forward and backward (relative error) = "
+       << fabs((backward - forward)/forward) << endl;
+}
+
+// ======================================================================
+
 void Quasi1DEuler::JacobianStateProduct(const InnerProdVector & u,
                                         InnerProdVector & v) {
   // check for consistent sizes

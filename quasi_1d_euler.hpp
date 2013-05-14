@@ -155,7 +155,7 @@ class ApproxJacobianTransposed :
    * \param[in] euler_solver - a Quasi1DEuler solver to access precond.
    */
   ApproxJacobianTransposed(Quasi1DEuler * euler_solver) {
-    solver = euler_solver; 
+    solver = euler_solver;
   }
 
   ~ApproxJacobianTransposed() {} ///< class destructor
@@ -504,6 +504,27 @@ class Quasi1DEuler {
    */
   void AddUnsteadySource(const int & n);
 
+  /*!
+   * \brief calculates the product (dpress/dq)*u
+   * \param[in] u - vector that is being multiplied (size = 3*num_nodes)
+   * \param[out] v - vector that holds resulting product (size = num_nodes)
+   */
+  void CalcDPressDQProduct(const InnerProdVector & u,
+                           InnerProdVector & v);
+
+  /*!
+   * \brief calculates the product (dpress/dq)^{T}*u
+   * \param[in] u - vector that is being multiplied (size = num_nodes)
+   * \param[out] v - vector that holds resulting product (size = 3*num_nodes)
+   */
+  void CalcDPressDQTransposedProduct(const InnerProdVector & u,
+                                     InnerProdVector & v);
+
+  /*!
+   * \brief checks the products involving dPress/dQ, using v^T*(dPress/dQ)*u
+   */
+  void TestDPressDQProducts();
+  
   /*!
    * \brief calculate the Jacobian-vector product
    * \param[in] u - vector that is being multiplied

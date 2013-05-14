@@ -97,4 +97,8 @@ int main(int argc, char *argv[]) {
   solver.TestJacobianAreaProducts();
 #endif
 
+#if 0
+  // test the dPress/dQ vector products
+  solver.TestDPressDQProducts();
+#endif
 }
