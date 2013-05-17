@@ -22,7 +22,7 @@ KONA_ROOT= /home/jehicken/Kona
 # linker options
 # NOTE: -L is for linking, -Wl,-rpath is for loading
 #LDFLAGS= -lstdc++ -L$(KONA_ROOT) -Wl,-rpath,$(KONA_ROOT) -lkona
-LDFLAGS= -lstdc++ -L$(BOOST_ROOT)/stage/lib -lboost_program_options \
+LDFLAGS= -lm -lstdc++ -L$(BOOST_ROOT)/stage/lib -lboost_program_options \
 	-L$(KONA_ROOT) -lkona
 
 # options that DO NOT vary
