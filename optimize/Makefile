@@ -17,7 +17,7 @@ CPPFLAGS= -cpp -DNDEBUG -DBOOST_UBLAS_ENABLE_PROXY_SHORTCUTS -DBOOST_UBLAS_TYPE_
 #CXXFLAGS= -g
 CXXFLAGS= 
 BOOST_ROOT= /usr/local/include/
-KONA_ROOT= /home/jehicken/Kona
+KONA_ROOT= $(KONA_HOME)
 
 # linker options
 # NOTE: -L is for linking, -Wl,-rpath is for loading
