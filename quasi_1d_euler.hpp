@@ -487,6 +487,12 @@ class Quasi1DEuler {
   void ResizeGrid(const InnerProdVector & coord);
 
   /*!
+   * \brief calculates the pressure, sound speed, and spectral radius
+   * \param[in] q_var - the state used to compute the auxilliary variables
+   */
+  void CalcAuxiliaryVariables(const InnerProdVector & q_var);
+  
+  /*!
    * \brief calculate the residual vector
    * \result residual based on q_ is calculated and stored in res_
    */
@@ -1087,12 +1093,6 @@ class Quasi1DEuler {
    * with q_var
    */
   void CalcEulerFlux(const InnerProdVector & q_var, InnerProdVector & flux);
-
-  /*!
-   * \brief calculates the pressure, sound speed, and spectral radius
-   * \param[in] q_var - the state used to compute the auxilliary variables
-   */
-  void CalcAuxiliaryVariables(const InnerProdVector & q_var);
 
   /*!
    * \brief calculates the flux Jacobian at a given state

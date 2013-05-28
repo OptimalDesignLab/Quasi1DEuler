@@ -871,6 +871,9 @@ void SBPDissipation::Apply(const int & num_var,
       v(iptr+n) = 0.0;
     }
   }
+
+  //HTimesVector(num_var, dq, dq);
+  
   // apply D_p^T to the values in dq  
   for (int i = 0; i < num_nodes_; i++) {
     int iptr = i*num_var;
