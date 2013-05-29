@@ -334,7 +334,7 @@ class Quasi1DEuler {
    * \brief set the coordinates of the nodes
    * \param[in] coord - values used to set coordinates
    */
-  void set_x_coord(InnerProdVector & coord) { 
+  void set_x_coord(const InnerProdVector & coord) { 
     x_coord_ = coord;
     sbp_deriv_.Apply(1, x_coord_, met_jac_);
   }
