@@ -44,15 +44,15 @@ class SumByParts {
    *
    * This is useful when changing the order or size of the grid
    */
-  virtual void Define(int nodes, int order);
+  void Define(int nodes, int order);
 
-  /*! 
+  /*!
    * \brief returns the order of the operator
    * \returns the value of the order_ member
    */
   int order() const { return order_; }
 
-  /*! 
+  /*!
    * \brief returns the value of the diagonal norm at the first/last node
    * \result the diagonal norm value at the first/last node
    */
@@ -65,7 +65,7 @@ class SumByParts {
    * \param[in] v - second vector in the inner product
    * \result the H inner product of u and v
    */
-  double InnerProductSBP(const int & num_var, 
+  double InnerProductSBP(const int & num_var,
                          const InnerProdVector & u,
                          const InnerProdVector & v) const;
 
@@ -101,7 +101,7 @@ class SumByParts {
    */
   void HinvTimesVector(const int & num_var, InnerProdVector & u,
                     InnerProdVector & v) const;
-  
+
  protected:
 
   int num_nodes_; ///< the number of nodes

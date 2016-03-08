@@ -17,7 +17,7 @@
 #include <boost/numeric/ublas/banded.hpp>
 #include <boost/numeric/ublas/vector_proxy.hpp>
 
-#include <krylov.hpp>
+#include "../krylov.hpp"
 
 #include "./inner_prod_vector.hpp"
 #include "./sum_by_parts.hpp"
@@ -39,7 +39,7 @@ enum norm_type {
   L2 = 2             ///< L2 norm
 };
 
-/*! 
+/*!
  * \brief complex version of fabs for complexified functions
  * \param[in] z - complex variable whose absolute value is being taken
  */
@@ -61,8 +61,8 @@ class JacobianVectorProduct :
    * \param[in] euler_solver - a Quasi1DEuler solver (defines product)
    */
   JacobianVectorProduct(Quasi1DEuler * euler_solver) {
-    solver = euler_solver; 
-  } 
+    solver = euler_solver;
+  }
 
   ~JacobianVectorProduct() {} ///< class destructor
 
@@ -83,7 +83,7 @@ class JacobianVectorProduct :
  * \class ApproxJacobian
  * \brief specialization of preconditioner for InnerProdVectors
  */
-class ApproxJacobian : 
+class ApproxJacobian :
     public kona::Preconditioner<InnerProdVector> {
  public:
 
@@ -92,7 +92,7 @@ class ApproxJacobian :
    * \param[in] euler_solver - a Quasi1DEuler solver to access precond.
    */
   ApproxJacobian(Quasi1DEuler * euler_solver) {
-    solver = euler_solver; 
+    solver = euler_solver;
   }
 
   ~ApproxJacobian() {} ///< class destructor
@@ -124,8 +124,8 @@ class JacobianTransposedVectorProduct :
    * \param[in] euler_solver - a Quasi1DEuler solver (defines product)
    */
   JacobianTransposedVectorProduct(Quasi1DEuler * euler_solver) {
-    solver = euler_solver; 
-  } 
+    solver = euler_solver;
+  }
 
   ~JacobianTransposedVectorProduct() {} ///< class destructor
 
@@ -146,7 +146,7 @@ class JacobianTransposedVectorProduct :
  * \class ApproxJacobianTransposed
  * \brief specialization of preconditioner for InnerProdVectors
  */
-class ApproxJacobianTransposed : 
+class ApproxJacobianTransposed :
     public kona::Preconditioner<InnerProdVector> {
  public:
 
@@ -186,8 +186,8 @@ class UnsteadyJacobianVectorProduct :
    * \param[in] euler_solver - a Quasi1DEuler solver (defines product)
    */
   UnsteadyJacobianVectorProduct(Quasi1DEuler * euler_solver) {
-    solver = euler_solver; 
-  } 
+    solver = euler_solver;
+  }
 
   ~UnsteadyJacobianVectorProduct() {} ///< class destructor
 
@@ -217,7 +217,7 @@ class UnsteadyJacTransVectorProduct :
    * \param[in] euler_solver - a Quasi1DEuler solver (defines product)
    */
   UnsteadyJacTransVectorProduct(Quasi1DEuler * euler_solver) {
-    solver = euler_solver; 
+    solver = euler_solver;
   }
 
   ~UnsteadyJacTransVectorProduct() {} ///< class destructor
@@ -243,11 +243,11 @@ class Nozzle;
 class Quasi1DEuler {
  public:
 
-  /*! 
+  /*!
    * \brief default constructor
    */
   //Quasi1DEuler() {
-  //  num_nodes_ = -1;    
+  //  num_nodes_ = -1;
   //}
 
   /*!
@@ -255,9 +255,9 @@ class Quasi1DEuler {
    * \param[in] num_nodes - number of nodes in the domain
    * \param[in] order - order of accuracy of SBP operator
    */
-  Quasi1DEuler(int num_nodes, int order) : 
+  Quasi1DEuler(int num_nodes, int order) :
       sbp_deriv_(num_nodes, order),
-      sbp_diss_(num_nodes, order, order),      
+      sbp_diss_(num_nodes, order, order),
       prec_(3*num_nodes, 3*num_nodes, 5, 5),
       x_coord_(num_nodes, 0.0),
       met_jac_(num_nodes, 0.0),
@@ -276,7 +276,7 @@ class Quasi1DEuler {
     dxi_ = 1.0/static_cast<double>(num_nodes_-1);
     ClearPreconditionerCallCounts();
   }
-  
+
   /*!
    * \brief default destructor
    */
@@ -301,7 +301,7 @@ class Quasi1DEuler {
   const double & dt() const {
     return dt_;
   }
-  
+
   /*!
    * \brief returns the number of calls to the primal preconditioner
    * \returns num_primal_precond_ member value
@@ -334,7 +334,7 @@ class Quasi1DEuler {
    * \brief set the coordinates of the nodes
    * \param[in] coord - values used to set coordinates
    */
-  void set_x_coord(const InnerProdVector & coord) { 
+  void set_x_coord(const InnerProdVector & coord) {
     x_coord_ = coord;
     sbp_deriv_.Apply(1, x_coord_, met_jac_);
   }
@@ -357,11 +357,11 @@ class Quasi1DEuler {
    * \param[in] sigma - width (std) of source
    * \param[in] source - values used to set source (between time steps)
    */
-  void set_source(const double & x, const double & sigma, 
-                  const InnerProdVector & source) { 
+  void set_source(const double & x, const double & sigma,
+                  const InnerProdVector & source) {
     src_x_ = x;
     src_sig2_ = sigma*sigma;
-    src_ = source; 
+    src_ = source;
   }
 
   /*!
@@ -369,15 +369,15 @@ class Quasi1DEuler {
    * \param[in] val - value of the coefficient
    */
   void set_diss_coeff(const double & val) { diss_coeff_ = val; }
-  
+
   /*!
    * \brief set the boundary conditions at the left boundary
    * \param[in] rho - value of the density at the left boundary
    * \param[in] rho_u - value of the momentum at the left boundary
-   * \param[in] e - value of the total energy per unit volume 
+   * \param[in] e - value of the total energy per unit volume
    */
-  void set_bc_left(const double & rho, const double & rho_u, 
-                   const double & e) { 
+  void set_bc_left(const double & rho, const double & rho_u,
+                   const double & e) {
     bc_left_(0) = rho;
     bc_left_(1) = rho_u;
     bc_left_(2) = e;
@@ -387,10 +387,10 @@ class Quasi1DEuler {
    * \brief set the boundary conditions at the right boundary
    * \param[in] rho - value of the density at the right boundary
    * \param[in] rho_u - value of the momentum at the right boundary
-   * \param[in] e - value of the total energy per unit volume 
+   * \param[in] e - value of the total energy per unit volume
    */
-  void set_bc_right(const double & rho, const double & rho_u, 
-                   const double & e) { 
+  void set_bc_right(const double & rho, const double & rho_u,
+                   const double & e) {
     bc_right_(0) = rho;
     bc_right_(1) = rho_u;
     bc_right_(2) = e;
@@ -439,7 +439,7 @@ class Quasi1DEuler {
    * \returns the adjoint solution vector
    */
   const InnerProdVector & get_psi() const { return psi_; }
-  
+
   /*!
    * \brief return a const reference to the residual vector
    * \returns the residual vector
@@ -451,17 +451,17 @@ class Quasi1DEuler {
    * \returns the pressure at each node
    */
   const InnerProdVector & get_press() const { return press_; }
-  
+
   /*!
    * \brief set a uniform flow based on the input values
-   * \param[in] rho - value of the density 
+   * \param[in] rho - value of the density
    * \param[in] rho_u - value of the momentum
-   * \param[in] e - value of the total energy per unit volume 
+   * \param[in] e - value of the total energy per unit volume
    */
   void InitialCondition(const double & rho, const double & rho_u,
                         const double & e) {
     for (int i = 0; i < num_nodes_; i++) {
-      q(i,0) = rho; 
+      q(i,0) = rho;
       q(i,1) = rho_u;
       q(i,2) = e;
     }
@@ -479,7 +479,7 @@ class Quasi1DEuler {
   void AdjointInitialCondition(const InnerProdVector & psi_init) {
     psi_ = psi_init;
   }
-  
+
   /*!
    * \brief resizes the number of nodes on the grid
    * \param[in] coord - the new grid coordinates
@@ -491,7 +491,7 @@ class Quasi1DEuler {
    * \param[in] q_var - the state used to compute the auxilliary variables
    */
   void CalcAuxiliaryVariables(const InnerProdVector & q_var);
-  
+
   /*!
    * \brief calculate the residual vector
    * \result residual based on q_ is calculated and stored in res_
@@ -530,21 +530,21 @@ class Quasi1DEuler {
    * \brief checks the products involving dPress/dQ, using v^T*(dPress/dQ)*u
    */
   void TestDPressDQProducts();
-  
+
   /*!
    * \brief calculate the Jacobian-vector product
    * \param[in] u - vector that is being multiplied
    * \param[out] v - vector that holds the resulting product
    * \pre the state held in q_ determines the Jacobian
    */
-  void JacobianStateProduct(const InnerProdVector & u, 
+  void JacobianStateProduct(const InnerProdVector & u,
                             InnerProdVector & v);
-  
-  /*! 
+
+  /*!
    * \brief tests the JacobianStateProduct() routine using FD
    */
   void TestJacobianStateProduct();
-  
+
   /*!
    * \brief calculate the Jacobian-transposed-vector product
    * \param[in] u - vector that is being multiplied
@@ -554,7 +554,7 @@ class Quasi1DEuler {
   void JacobianTransposedStateProduct(const InnerProdVector & u,
                                       InnerProdVector & v);
 
-  /*! 
+  /*!
    * \brief tests the JacobianTransposedStateProduct() routine
    */
   void TestJacobianTransposedStateProduct();
@@ -580,7 +580,7 @@ class Quasi1DEuler {
   void UnsteadyApproxJacStateProduct(const InnerProdVector & u,
                                      InnerProdVector & v,
                                      const bool & plus_time = true);
-  
+
   /*!
    * \brief calculate the (unsteady) transposed Jacobian-vector product
    * \param[in] u - vector that is being multiplied
@@ -589,7 +589,7 @@ class Quasi1DEuler {
    * \pre the states held in q_ and q_old_ determines the Jacobian
    */
   void UnsteadyJacTransStateProduct(const InnerProdVector & u,
-                                    InnerProdVector & v, 
+                                    InnerProdVector & v,
                                     const bool & plus_time = true);
 
   /*!
@@ -603,15 +603,15 @@ class Quasi1DEuler {
                                           InnerProdVector & v,
                                           const bool & plus_time = true);
 
-  /*! 
+  /*!
    * \brief tests the UnsteadyJacTransStateProduct() routine
    */
   void TestUnsteadyJacTransStateProduct();
 
   /*!
    * \brief calculate the residual Hessian-vector product
-   * \param[in] psi - vector that left-multiplies 
-   * \param[in] w - vector that right-multiplies 
+   * \param[in] psi - vector that left-multiplies
+   * \param[in] w - vector that right-multiplies
    * \param[out] v - vector that holds the resulting product
    * \pre the state held in q_ determines the Hessian
    *
@@ -621,18 +621,18 @@ class Quasi1DEuler {
   void ResidualHessianProduct(const InnerProdVector & psi,
                               InnerProdVector & w,
                               InnerProdVector & v);
-  
-  /*! 
+
+  /*!
    * \brief tests the ResidualHessianProduct() routine
    */
   void TestResidualHessianProduct();
 
-  /*! 
+  /*!
    * \brief constructs an LU-preconditioner based on a first-order approx
   */
   void BuildAndFactorPreconditioner();
 
-  /*! 
+  /*!
    * \brief constructs an LU-preconditioner based on a first-order approx
    * \param[in] factor - if true factors the matrix, otherwise does not factor
   */
@@ -643,7 +643,7 @@ class Quasi1DEuler {
    * \param[in] u - vector that is being preconditioned
    * \param[out] v - preconditioned vector
    */
-  void Precondition(const InnerProdVector & u, 
+  void Precondition(const InnerProdVector & u,
                     InnerProdVector & v);
 
   /*!
@@ -658,10 +658,10 @@ class Quasi1DEuler {
    * \brief multiply a vector by the first-order LU-preconditioner
    * \param[in] u - vector that is being multiplied
    * \param[out] v - product
-   * 
+   *
    * For testing
    */
-  void PreconditionerMultiply(const InnerProdVector & u, 
+  void PreconditionerMultiply(const InnerProdVector & u,
                               InnerProdVector & v);
 
   /*!
@@ -670,7 +670,7 @@ class Quasi1DEuler {
    * \param[out] v - vector that holds the resulting product
    * \pre q_ and area_ determine the Jacobian
    */
-  void JacobianAreaProduct(const InnerProdVector & u, 
+  void JacobianAreaProduct(const InnerProdVector & u,
                            InnerProdVector & v);
 
   /*!
@@ -682,7 +682,7 @@ class Quasi1DEuler {
   void JacobianTransposedAreaProduct(const InnerProdVector & u,
                                      InnerProdVector & v);
 
-  /*! 
+  /*!
    * \brief tests JacobianAreaProduct() and JacobianTransposedProduct()
    */
   void TestJacobianAreaProducts();
@@ -693,7 +693,7 @@ class Quasi1DEuler {
    * \param[in] target_cfl - a target CFL number to use
    * \param[in] tol - tolerance with which to solve the system
    */
-  void ExplicitEuler(const int & max_iter, const double & target_cfl, 
+  void ExplicitEuler(const int & max_iter, const double & target_cfl,
                      const double & tol);
 
   /*!
@@ -714,7 +714,7 @@ class Quasi1DEuler {
   int SolveAdjoint(const int & max_iter, const double & tol,
                     const InnerProdVector & dJdQ,
                     InnerProdVector & psi);
-  
+
   /*!
    * \brief solves the linearized state equation using a Krylov solver
    * \param[in] max_iter - maximum number of iterations permitted
@@ -736,7 +736,7 @@ class Quasi1DEuler {
    * \param[in] tec_write - if true, a Tecplot solution file is written
    */
   int SolveUnsteady(const int & iter, const double & Time, const double & tol,
-                    const bool & store = false, 
+                    const bool & store = false,
                     const string & flow_file = string("save_flow.bin"),
                     const bool & tec_write = false);
 
@@ -749,7 +749,7 @@ class Quasi1DEuler {
    * \param[in] psi_file - name of the binary file where the adjoint is stored
    * \param[in] init_adjoint - if true, the value in psi_ is used as I.C.
    */
-  int SolveUnsteadyAdjoint(const string & flow_file, const int & max_krylov, 
+  int SolveUnsteadyAdjoint(const string & flow_file, const int & max_krylov,
                            const double & tol, const string & dJdQ_file,
                            const string & psi_file,
                            const bool & init_adjoint = false);
@@ -764,12 +764,12 @@ class Quasi1DEuler {
    *
    * This solves the linearized system at ONE particular iteration, not the
    * complete unsteady system.
-   */  
+   */
   int SolveUnsteadyIterLinearized(const int & max_iter,
                                   const double & tol,
                                   const InnerProdVector & rhs,
                                   InnerProdVector & dq);
-  
+
   /*!
    * \brief solves one iteration of the unsteady adjoint equation
    * \param[in] max_iter - maximum number of iterations permitted
@@ -824,7 +824,7 @@ class Quasi1DEuler {
    * \param[in] fout - file to write to
    * \param[in] q_var - solution vector to write
    */
-  void SaveSolution(ofstream & fout, const InnerProdVector & q_var) const; 
+  void SaveSolution(ofstream & fout, const InnerProdVector & q_var) const;
 
   /*!
    * \brief computes the error in the Mach number using exact solution
@@ -844,7 +844,7 @@ class Quasi1DEuler {
   double CalcTotalEnergy(const bool & sbp_quad);
 
   /*!
-   * \brief calculates gradient w.r.t. Q of the total energy functional 
+   * \brief calculates gradient w.r.t. Q of the total energy functional
    * \param[out] dJdQ - gradient of the objective
    */
   void CalcTotalEnergydJdQ(InnerProdVector & dJdQ);
@@ -950,13 +950,13 @@ class Quasi1DEuler {
    * \param[in] dJdX - vector that partial derivative is added to
    */
   void AddSensordJdSource(const double & reg_param, InnerProdVector & dJdX);
-  
+
   /*!
    * \brief product of the Unsteady Jacobian, dRes/dx, with design variables
    */
   void UnsteadyJacobianSourceProduct(const InnerProdVector & u,
                                      const string & prod_file);
-  
+
   /*!
    * \brief product of the transposed Unsteady Jacobian, dRes/dx, with adjoint
    * \param[in] psi_file - file name where adjoint solution is stored
@@ -1032,7 +1032,7 @@ class Quasi1DEuler {
    * \param[in] node - node at which variable is wanted
    */
   ublas::vector_range<ublas::vector<double> > q(const int & node) {
-    ublas::vector_range<ublas::vector<double> > 
+    ublas::vector_range<ublas::vector<double> >
         q_at_node(q_, ublas::range(3*node, 3*node + 3));
     return q_at_node;
   }
@@ -1060,7 +1060,7 @@ class Quasi1DEuler {
    * \param[in] node - node at which variable is wanted
    */
   ublas::vector_range<ublas::vector<double> > q_old(const int & node) {
-    ublas::vector_range<ublas::vector<double> > 
+    ublas::vector_range<ublas::vector<double> >
         q_at_node(q_old_, ublas::range(3*node, 3*node + 3));
     return q_at_node;
   }
@@ -1071,7 +1071,7 @@ class Quasi1DEuler {
    * \param[in] var - index of desired residual
    */
   double & res(const int & node, const int & var) {
-    return res_(3*node+var); 
+    return res_(3*node+var);
   }
 
   /*!
@@ -1079,7 +1079,7 @@ class Quasi1DEuler {
    * \param[in] node - node at which residual is wanted
    */
   ublas::vector_range<ublas::vector<double> > res(const int & node) {
-    ublas::vector_range<ublas::vector<double> > 
+    ublas::vector_range<ublas::vector<double> >
         res_at_node(res_, ublas::range(3*node, 3*node + 3));
     return res_at_node;
   }
@@ -1088,7 +1088,7 @@ class Quasi1DEuler {
    * \brief calculates and stores the Euler flux based on value in q_
    * \param[in] q_var - the vector of the flow state used to evaluate flux
    * \param[out] flux - vector of fluxes at each node
-   * 
+   *
    * Note: press_ is used inside this member function, so it must be consistent
    * with q_var
    */
@@ -1166,13 +1166,13 @@ class Quasi1DEuler {
     T rho = q(0);
     T u = q(1)/rho;
     T E = q(2);
-  
+
     const T Gamma = static_cast<T>(kGamma);
     T p = (Gamma - 1.0)*(E - 0.5*rho*u*u);
     T a = sqrt(Gamma*p/rho);
     T H = (E + p)/rho;
     T phi = 0.5*u*u;
-  
+
     // calculate the wave speeds
     T lam1 = 0.5*area*(fabs(u + a) + sgn*(u + a));
     T lam2 = 0.5*area*(fabs(u - a) + sgn*(u - a));
@@ -1183,7 +1183,7 @@ class Quasi1DEuler {
     T lam1 = 0.5*area*(max(fabs(u + a),kVn*spec) + sgn*(u + a));
     T lam2 = 0.5*area*(max(fabs(u - a),kVn*spec) + sgn*(u - a));
     T lam3 = 0.5*area*(max(fabs(u),kVl*spec) + sgn*(u));
-#endif 
+#endif
 
     // calculate the differences
     T dq1 = q(0) - bc(0);
@@ -1196,7 +1196,7 @@ class Quasi1DEuler {
 
     // temporary vectors
     ublas::bounded_vector<T, 3> E1dq, E2dq;
-  
+
     // get E1 times dq
     E1dq(0) = phi*dq1 - u*dq2 + dq3;
     E1dq(1) = E1dq(0)*u;
@@ -1216,19 +1216,19 @@ class Quasi1DEuler {
     E1dq(0) = -u*dq1 + dq2;
     E1dq(1) = E1dq(0)*u;
     E1dq(2) = E1dq(0)*H;
-  
+
     // get E4 times dq
     E2dq(0) = 0.0;
     E2dq(1) = phi*dq1 - u*dq2 + dq3;
     E2dq(2) = E2dq(1)*u;
 
     // add to sat
-    tmp1 = 0.5*(lam1 - lam2)/a; 
+    tmp1 = 0.5*(lam1 - lam2)/a;
     sat += tmp1*(E1dq + (Gamma-1.0)*E2dq);
   }
 
   template <class T>
-  void CalcSAT(const ublas::bounded_vector<T,3> & bc, 
+  void CalcSAT(const ublas::bounded_vector<T,3> & bc,
                const T & area, const T & sgn,
                ublas::vector_range<ublas::vector<T> > q,
                ublas::bounded_vector<T,3> & sat) const {
@@ -1237,7 +1237,7 @@ class Quasi1DEuler {
     CalcSAT(bc, area, sgn, q_temp, sat);
   }
 
-#if 0  
+#if 0
   template <class T>
   void CalcSAT(ublas::bounded_vector<T,3> & bc,
                const T & area, const T & sgn,
@@ -1285,8 +1285,8 @@ class Quasi1DEuler {
     double dt = 1E+15;
     //double dx = 1.0/(static_cast<double>(num_nodes_-1));
     for (int i = 0; i < num_nodes_; i++) {
-      double dx = met_jac_(i); 
-      if (dt > CFL*dx/spect_(i)) 
+      double dx = met_jac_(i);
+      if (dt > CFL*dx/spect_(i))
         dt = CFL*dx/spect_(i);
     }
   }
@@ -1294,7 +1294,7 @@ class Quasi1DEuler {
   int num_nodes_; ///< number of nodes
   int num_primal_precond_; ///< num of calls to primal preconditioner
   int num_adjoint_precond_; ///< num of calls to adjoint preconditioner
-  double diss_coeff_; ///< numerical dissipation coefficient 
+  double diss_coeff_; ///< numerical dissipation coefficient
   double dxi_; ///< mesh spacing for domain = [0,1] (or in computational space)
   double dt_; ///< time step size
   ublas::bounded_vector<double,3> bc_left_; ///< left-end boundary conditions
