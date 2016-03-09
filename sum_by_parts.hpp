@@ -27,6 +27,11 @@ class SumByParts {
 
   /*!
    * \brief default constructor
+   */
+  SumByParts() {}
+
+  /*!
+   * \brief default constructor
    * \param[in] nodes - the number of nodes in the grid
    * \param[in] order - the order of the diagonal norm
    */
@@ -124,6 +129,11 @@ class SBP1stDerivative : public SumByParts {
  public:
 
   /*!
+  * \brief empty constructor
+  */
+  SBP1stDerivative() {}
+
+  /*!
    * \brief default constructor
    * \param[in] nodes - the number of nodes in the grid
    * \param[in] order - the order of the operator
@@ -169,6 +179,11 @@ class SBP1stDerivative : public SumByParts {
  */
 class SBPDissipation : public SumByParts {
  public:
+
+  /*!
+  * \brief empty constructor
+  */
+  SBPDissipation() {}
 
   /*!
    * \brief default constructor

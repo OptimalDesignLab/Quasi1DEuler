@@ -246,9 +246,7 @@ class Quasi1DEuler {
   /*!
    * \brief default constructor
    */
-  //Quasi1DEuler() {
-  //  num_nodes_ = -1;
-  //}
+  Quasi1DEuler() {}
 
   /*!
    * \brief class constructor
