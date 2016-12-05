@@ -1471,7 +1471,7 @@ void Quasi1DEuler::ExplicitEuler(const int & max_iter,
 // ======================================================================
 
 int Quasi1DEuler::NewtonKrylov(const int & max_iter,
-                                const double & tol) {
+                                const double & tol, bool info) {
   kona::MatrixVectorProduct<InnerProdVector>*
       mat_vec = new JacobianVectorProduct(this);
   kona::Preconditioner<InnerProdVector>*
@@ -1487,10 +1487,10 @@ int Quasi1DEuler::NewtonKrylov(const int & max_iter,
     CalcResidual();
     double norm = ResidualNorm();
     InnerProdVector b(-res_);
-    cout << "iter = " << iter
+    if (info) cout << "iter = " << iter
          << ": L2 norm of residual = " << norm << endl;
     if ( (norm < tol) || (norm < 1.e-14) ) {
-      cout << "Quasi1DEuler: NewtonKrylov converged" << endl;
+      if (info) cout << "Quasi1DEuler: NewtonKrylov converged" << endl;
       return precond_calls;
     }
     // create the approximate-Jacobian LU preconditioner
