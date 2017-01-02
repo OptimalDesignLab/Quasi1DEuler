@@ -104,6 +104,16 @@ class InnerProdVector : public ublas::vector<double> {
     ublas::vector<double>::operator=(
         ublas::scalar_vector<double>(size(), val));
   }
+    
+  void TextWrite(ofstream & fout) {
+    if (!fout.is_open()) {
+      cerr << "InnerProdVector::TextWrite(): fout is not open!" << endl;
+      throw(-1);
+    }
+    for (int i = 0; i < size(); i++) {
+      fout << this->operator()(i) << endl;
+    }
+  }
 
   void BinaryWrite(ofstream & fout) const {
     if (!fout.is_open()) {
