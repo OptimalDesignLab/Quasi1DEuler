@@ -1499,7 +1499,7 @@ int Quasi1DEuler::NewtonKrylov(const int & max_iter,
     int m = 10;
     double tol = 1.0e-2;
     InnerProdVector dq(3*num_nodes_, 0.0);
-    int krylov_precond_calls;
+    int krylov_precond_calls = 0;
     try {
       kona::FGMRES(m, tol, b, dq, *mat_vec, *precond,
                    krylov_precond_calls, fout);
