@@ -1,17 +1,20 @@
+NOTE: This repository exists primarily as a submodule for the ElasticNozzleMDO 
+problem. Stand-alone compilation and use of this solver is not supported, and 
+may not work if attempted. For the coupled ElasticNozzleMDO problem, please 
+refer to the repository at https://github.com/OptimalDesignLab/ElasticNozzleMDO
+
 quasi_1d_euler is a CFD code for modelling simple nozzle flows.  The spatial
 discretization uses summation-by-parts finite-difference operators and weakly
 imposed boundary conditions.  The solution method is Newton-Krylov.
 
 Dependencies
 
-The code uses the Boost library and the Kona in-house library.  Make sure both
-of these are installed on your machine first.  The code also uses GNU Make and
-gcc.
+The code uses the Boost library.
 
 Compiling
 
 First, make sure the Kona directory is in your path.  For example, if you are
-running the bash shell and you installed Kona in your home directory, you can
+running the b`ash shell and you installed Kona in your home directory, you can
 add the following line to your .bashrc file:
 
 export LD_LIBRARY_PATH=/home/your_user_name/Kona:$LD_LIBRARY_PATH
